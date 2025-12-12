@@ -70,7 +70,6 @@ async def export_slides(
     request_id = str(uuid.uuid4())
     try:
         file_name = f"{uuid.uuid4()}.pptx"
-        safe_title = req.title.replace(' ', '_').replace('/', '_')
         path = f"{OUTPUT_DIR}/{file_name}"
 
         PPTXService.create_pptx(req.title, req.slides, path)
