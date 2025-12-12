@@ -24,3 +24,15 @@ if LLM_PROVIDER == "mock":
         LLM_PROVIDER = "gemini"
     elif OPENAI_API_KEY:
         LLM_PROVIDER = "openai"
+
+# Redis Configuration
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
+
+# Rate Limiting Configuration
+RATE_LIMIT_GENERATE = int(os.getenv("RATE_LIMIT_GENERATE", "10"))  # requests per window
+RATE_LIMIT_EXPORT = int(os.getenv("RATE_LIMIT_EXPORT", "30"))
+RATE_LIMIT_DOWNLOAD = int(os.getenv("RATE_LIMIT_DOWNLOAD", "100"))
+RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW", "60"))  # seconds

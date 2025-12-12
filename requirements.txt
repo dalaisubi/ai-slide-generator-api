@@ -45,3 +45,4 @@ uritemplate==4.2.0
 urllib3==2.6.1
 uvicorn==0.38.0
 xlsxwriter==3.2.9
+redis==5.0.1

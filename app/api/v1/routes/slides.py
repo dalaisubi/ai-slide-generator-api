@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import FileResponse
 from app.services.llm_service import generate_slide_content
 from app.models.request_response_models import (
@@ -9,6 +9,11 @@ from app.models.request_response_models import (
 )
 from app.services.pptx_service import PPTXService
 from app.settings import get_current_timestamp
+from app.dependencies.rate_limit import (
+    rate_limit_generate,
+    rate_limit_export,
+    rate_limit_download
+)
 
 
 router = APIRouter()
@@ -18,7 +23,10 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 @router.post("/generate", response_model=PresentationResponse)
-async def generate_slides(payload: GenerateRequest):
+async def generate_slides(
+    payload: GenerateRequest,
+    _: dict = Depends(rate_limit_generate)
+):
     """
     Generates slide content using LLM (mock or real).
     """
@@ -52,7 +60,10 @@ async def generate_slides(payload: GenerateRequest):
 
 
 @router.post("/export", response_model=ExportResponse)
-async def export_slides(req: ExportRequest):
+async def export_slides(
+    req: ExportRequest,
+    _: dict = Depends(rate_limit_export)
+):
     """
     Exports slides to PowerPoint format and returns file information.
     """
@@ -91,7 +102,10 @@ async def export_slides(req: ExportRequest):
 
 
 @router.get("/download/{file_name}")
-async def download_file(file_name: str):
+async def download_file(
+    file_name: str,
+    _: dict = Depends(rate_limit_download)
+):
     """
     Downloads the generated PowerPoint file.
 
